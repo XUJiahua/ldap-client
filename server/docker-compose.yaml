@@ -1,0 +1,28 @@
+version: "3"
+services:
+  openldap:
+    container_name: openldap
+    image: osixia/openldap:latest
+    restart: always
+    environment:
+      LDAP_ORGANISATION: "openldap"
+      LDAP_DOMAIN: "example.com"
+      LDAP_ADMIN_PASSWORD: "123456"
+      # LDAP_CONFIG_PASSWORD: "123456"
+    volumes:
+      - ./data/openldap/data:/var/lib/ldap
+      - ./data/openldap/config:/etc/ldap/slapd.d
+    ports:
+      - '389:389'
+      - '636:636'
+  phpldapadmin:
+    container_name: phpldapadmin
+    image: osixia/phpldapadmin:latest
+    restart: always
+    environment:
+      PHPLDAPADMIN_HTTPS: "false"
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
+    ports:
+      - '30004:80'
+    depends_on:
+      - openldap
