@@ -37,10 +37,14 @@ func init() {
 	// will be global for your application.
 
 	viper.AutomaticEnv() // read in environment variables that match
-	rootCmd.PersistentFlags().StringVar(&ldapURL, "ldap-url", viper.GetString("LDAP_URL"), "ldap url")
-	rootCmd.PersistentFlags().StringVar(&ldapAdminUser, "ldap-user", viper.GetString("LDAP_USER"), "ldap user")
-	rootCmd.PersistentFlags().StringVar(&ldapAdminPassword, "ldap-password", viper.GetString("LDAP_PASSWORD"), "ldap password")
-	rootCmd.PersistentFlags().StringVar(&peopleDN, "people-dn", viper.GetString("PEOPLE_DN"), "ldap people dn")
+	ldapURL = viper.GetString("LDAP_URL")
+	ldapAdminUser = viper.GetString("LDAP_USER")
+	ldapAdminPassword = viper.GetString("LDAP_PASSWORD")
+	peopleDN = viper.GetString("PEOPLE_DN")
+	//rootCmd.PersistentFlags().StringVar(&ldapURL, "ldap-url", viper.GetString("LDAP_URL"), "ldap url")
+	//rootCmd.PersistentFlags().StringVar(&ldapAdminUser, "ldap-user", viper.GetString("LDAP_USER"), "ldap user")
+	//rootCmd.PersistentFlags().StringVar(&ldapAdminPassword, "ldap-password", viper.GetString("LDAP_PASSWORD"), "ldap password")
+	//rootCmd.PersistentFlags().StringVar(&peopleDN, "people-dn", viper.GetString("PEOPLE_DN"), "ldap people dn")
 }
 
 func handleErr(err error) {
