@@ -2,16 +2,19 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	"github.com/spf13/viper"
 )
 
 var ldapURL string
 var peopleDN string
+var groupDN string
 var ldapAdminUser string
 var ldapAdminPassword string
+var currentUser string // e.g., john.xu@example.com
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -41,6 +44,8 @@ func init() {
 	ldapAdminUser = viper.GetString("LDAP_USER")
 	ldapAdminPassword = viper.GetString("LDAP_PASSWORD")
 	peopleDN = viper.GetString("PEOPLE_DN")
+	groupDN = viper.GetString("GROUP_DN")
+	currentUser = viper.GetString("CURRENT_USER")
 	//rootCmd.PersistentFlags().StringVar(&ldapURL, "ldap-url", viper.GetString("LDAP_URL"), "ldap url")
 	//rootCmd.PersistentFlags().StringVar(&ldapAdminUser, "ldap-user", viper.GetString("LDAP_USER"), "ldap user")
 	//rootCmd.PersistentFlags().StringVar(&ldapAdminPassword, "ldap-password", viper.GetString("LDAP_PASSWORD"), "ldap password")
