@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/xujiahua/ldap-client/pkg/ldap"
-	"os"
 )
 
 // resetPasswordCmd represents the resetPassword command
@@ -16,7 +17,7 @@ var resetPasswordCmd = &cobra.Command{
 			fmt.Println("email is required")
 			os.Exit(1)
 		}
-		client, err := ldap.NewClient(ldapURL, peopleDN, ldapAdminUser, ldapAdminPassword)
+		client, err := ldap.NewClient(ldapURL, ldapAdminUser, ldapAdminPassword, peopleDN, "")
 		handleErr(err)
 
 		newPassword, err := client.ResetPasswordByEmail(args[0])

@@ -2,8 +2,9 @@ package ldap
 
 import (
 	"errors"
-	"github.com/go-ldap/ldap/v3"
 	"strings"
+
+	"github.com/go-ldap/ldap/v3"
 )
 
 var ErrInvalidEmail = errors.New("invalid email, expect xxx.xxx@xxx")
@@ -18,8 +19,12 @@ func EmailToCN(email string) (string, error) {
 	return cn, nil
 }
 
-func cnToDN(cn string, peopleDN string) string {
-	return "cn=" + cn + "," + peopleDN
+func cnToDN(cn string, baseDN string) string {
+	return "cn=" + cn + "," + baseDN
+}
+
+func ouToDN(ou string, baseDN string) string {
+	return "ou=" + ou + "," + baseDN
 }
 
 func genAttributes(email string) (map[string][]string, error) {
