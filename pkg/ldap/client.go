@@ -168,3 +168,25 @@ func contains(ss []string, s string) bool {
 	}
 	return false
 }
+
+func (c Client) AddUserToGroupEasy(email, groupName string) error {
+	cn, err := EmailToCN(email)
+	if err != nil {
+		return err
+	}
+	userDN := cnToDN(cn, c.peopleBaseDN)
+	groupDN := ouToDN(groupName, c.groupBaseDN)
+
+	return c.AddUserToGroup(userDN, groupDN)
+}
+
+func (c Client) RemoveUserFromGroupEasy(email, groupName string) error {
+	cn, err := EmailToCN(email)
+	if err != nil {
+		return err
+	}
+	userDN := cnToDN(cn, c.peopleBaseDN)
+	groupDN := ouToDN(groupName, c.groupBaseDN)
+
+	return c.RemoveUserFromGroup(userDN, groupDN)
+}
