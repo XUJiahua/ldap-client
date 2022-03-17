@@ -54,7 +54,7 @@ func (c Client) ResetPassword(userDN string) (string, error) {
 
 // CreateAccount creates a new account entry in the LDAP directory without specify password, and you need reset the password
 func (c Client) CreateAccount(email string) error {
-	attributes, err := genAttributes(email)
+	attributes, err := genUserAttributes(email)
 	if err != nil {
 		return err
 	}
@@ -105,6 +105,27 @@ func (c Client) GetGroup(groupDN string) (*ldap.Entry, error) {
 	}
 
 	return nil, nil
+}
+
+func (c Client) CreateGroup(groupName, ownerEmail string) error {
+	cn, err := EmailToCN(ownerEmail)
+	if err != nil {
+		return err
+	}
+	member := cnToDN(cn, c.peopleBaseDN)
+
+	attributes, err := genGroupAttributes(groupName, member)
+	if err != nil {
+		return err
+	}
+	logrus.Debug(attributes)
+
+	dn := ouToDN(groupName, c.groupBaseDN)
+	return c.l.Add(&ldap.AddRequest{
+		DN:         dn,
+		Attributes: toLDAPAttributes(attributes),
+		Controls:   nil,
+	})
 }
 
 func (c Client) AddUserToGroup(userDN, groupDN string) error {

@@ -69,3 +69,11 @@ func TestClient_AddUserToGroupEasy(t *testing.T) {
 	assert.NoError(t, err)
 	TestClient_GetGroups(t)
 }
+
+func TestClient_CreateGroup(t *testing.T) {
+	c := newClient()
+	TestClient_GetGroups(t)
+	err := c.CreateGroup("test", "john.xu@example.com")
+	assert.NoError(t, err)
+	TestClient_GetGroups(t)
+}

@@ -27,7 +27,7 @@ func ouToDN(ou string, baseDN string) string {
 	return "ou=" + ou + "," + baseDN
 }
 
-func genAttributes(email string) (map[string][]string, error) {
+func genUserAttributes(email string) (map[string][]string, error) {
 	cn, err := EmailToCN(email)
 	if err != nil {
 		return nil, err
@@ -46,6 +46,16 @@ func genAttributes(email string) (map[string][]string, error) {
 	attributes["objectclass"] = []string{"inetOrgPerson", "top"}
 	// dn is the entry key, not entry attribute
 	//attributes["dn"] = []string{strings.Join([]string{"cn=" + cn, baseDN}, ",")}
+
+	return attributes, nil
+}
+
+func genGroupAttributes(groupName, member string) (map[string][]string, error) {
+	attributes := make(map[string][]string)
+	attributes["cn"] = []string{groupName}
+	attributes["ou"] = []string{groupName}
+	attributes["objectclass"] = []string{"groupOfUniqueNames", "top"}
+	attributes["uniqueMember"] = []string{member}
 
 	return attributes, nil
 }
