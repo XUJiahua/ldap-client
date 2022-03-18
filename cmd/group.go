@@ -23,8 +23,6 @@ import (
 var groupCmd = &cobra.Command{
 	Use:   "group",
 	Short: "all group related commands, -h for help",
-	Run: func(cmd *cobra.Command, args []string) {
-	},
 }
 
 func init() {

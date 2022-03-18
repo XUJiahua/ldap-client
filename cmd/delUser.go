@@ -28,21 +28,25 @@ var delUserCmd = &cobra.Command{
 	Use:   "delUser",
 	Short: "remove a user from a group, user email and group name are required",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 2 {
-			fmt.Println("group name and user email are required")
+		if len(args) < 1 {
+			fmt.Println("at least 1 user email is required")
 			os.Exit(1)
 		}
 		client, err := ldap.NewClient(ldapURL, ldapAdminUser, ldapAdminPassword, peopleDN, groupDN)
 		handleErr(err)
-		err = client.RemoveUserFromGroupEasy(args[0], args[1])
-		handleErr(err)
-		fmt.Printf("%s removed from group %s\n", args[0], args[1])
+
+		for _, user := range args {
+			err = client.RemoveUserFromGroupEasy(user, groupName)
+			handleErr(err)
+			fmt.Printf("%s removed from group %s\n", user, groupName)
+		}
 	},
 }
 
 func init() {
 	groupCmd.AddCommand(delUserCmd)
 
+	delUserCmd.Flags().StringVarP(&groupName, "group", "g", "", "group name")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

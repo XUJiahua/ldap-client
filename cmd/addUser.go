@@ -23,25 +23,32 @@ import (
 	"github.com/xujiahua/ldap-client/pkg/ldap"
 )
 
+var groupName string
+
 // addUserCmd represents the addUser command
 var addUserCmd = &cobra.Command{
 	Use:   "addUser",
 	Short: "add a user to a group, user email and group name are required",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 2 {
-			fmt.Println("group name and user email are required")
+		if len(args) < 1 {
+			fmt.Println("at least 1 user email is required")
 			os.Exit(1)
 		}
 		client, err := ldap.NewClient(ldapURL, ldapAdminUser, ldapAdminPassword, peopleDN, groupDN)
 		handleErr(err)
-		err = client.AddUserToGroupEasy(args[0], args[1])
-		handleErr(err)
-		fmt.Printf("%s added to group %s\n", args[0], args[1])
+
+		for _, user := range args {
+			err = client.AddUserToGroupEasy(user, groupName)
+			handleErr(err)
+			fmt.Printf("%s added to group %s\n", user, groupName)
+		}
 	},
 }
 
 func init() {
 	groupCmd.AddCommand(addUserCmd)
+
+	addUserCmd.Flags().StringVarP(&groupName, "group", "g", "", "group name")
 
 	// Here you will define your flags and configuration settings.
 
