@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 	"github.com/xujiahua/ldap-client/pkg/ldap"
@@ -26,9 +27,21 @@ var createAccountCmd = &cobra.Command{
 		handleErr(err)
 
 		cn, _ := ldap.EmailToCN(args[0])
-		fmt.Println("login user: " + cn)
-		fmt.Println("login password: " + newPassword)
+		message := fmt.Sprintf("\"Your LDAP user: %s, password: %s\"", cn, newPassword)
+		handleErr(redirectMessage(args[0], message))
+
+		// fmt.Println("login user: " + cn)
+		// fmt.Println("login password: " + newPassword)
 	},
+}
+
+func redirectMessage(to, message string) error {
+	command := exec.Command("sh", "-c",
+		fmt.Sprintf(redirectMessageCommand, to, message))
+	command.Dir = redirectMessageCommandDir
+	output, err := command.CombinedOutput()
+	fmt.Printf("%s\n", output)
+	return err
 }
 
 func init() {

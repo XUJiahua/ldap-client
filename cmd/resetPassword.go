@@ -24,8 +24,10 @@ var resetPasswordCmd = &cobra.Command{
 		handleErr(err)
 
 		cn, _ := ldap.EmailToCN(args[0])
-		fmt.Println("login user: " + cn)
-		fmt.Println("login password: " + newPassword)
+		message := fmt.Sprintf("\"Your LDAP user: %s, password: %s\"", cn, newPassword)
+		handleErr(redirectMessage(args[0], message))
+		// fmt.Println("login user: " + cn)
+		// fmt.Println("login password: " + newPassword)
 
 	},
 }

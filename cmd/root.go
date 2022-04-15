@@ -15,6 +15,8 @@ var groupDN string
 var ldapAdminUser string
 var ldapAdminPassword string
 var currentUser string // e.g., john.xu@example.com
+var redirectMessageCommand string
+var redirectMessageCommandDir string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -46,6 +48,15 @@ func init() {
 	peopleDN = viper.GetString("PEOPLE_DN")
 	groupDN = viper.GetString("GROUP_DN")
 	currentUser = viper.GetString("CURRENT_USER")
+	redirectMessageCommand = viper.GetString("REDIRECT_MESSAGE_COMMAND")
+	if redirectMessageCommand == "" {
+		redirectMessageCommand = "echo Dear %s, %s"
+	}
+	redirectMessageCommandDir = viper.GetString("REDIRECT_MESSAGE_COMMAND_DIR")
+	if redirectMessageCommandDir == "" {
+		redirectMessageCommandDir = "./"
+	}
+
 	//rootCmd.PersistentFlags().StringVar(&ldapURL, "ldap-url", viper.GetString("LDAP_URL"), "ldap url")
 	//rootCmd.PersistentFlags().StringVar(&ldapAdminUser, "ldap-user", viper.GetString("LDAP_USER"), "ldap user")
 	//rootCmd.PersistentFlags().StringVar(&ldapAdminPassword, "ldap-password", viper.GetString("LDAP_PASSWORD"), "ldap password")
